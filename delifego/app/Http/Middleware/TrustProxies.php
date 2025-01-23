@@ -2,16 +2,15 @@
 
 namespace App\Http\Middleware;
 
+use Illuminate\Http\Middleware\TrustProxies as Middleware;
 use Illuminate\Http\Request;
-use Fideloper\Proxy\TrustProxies as BaseTrustProxies;
-use Symfony\Component\HttpFoundation\Response;
 
-class TrustProxies extends BaseTrustProxies
+class TrustProxies extends Middleware
 {
     /**
      * The trusted proxies for this application.
      *
-     * @var array|string
+     * @var array<int, string|null>
      */
     protected $proxies;
 
@@ -20,5 +19,7 @@ class TrustProxies extends BaseTrustProxies
      *
      * @var int
      */
-    protected $headers = Request::HEADER_X_FORWARDED_ALL;
+    protected $headers = 0; 
+
+
 }
