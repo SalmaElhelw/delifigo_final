@@ -2,6 +2,8 @@
 
 return [
 
+
+
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -123,4 +125,11 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+'middleware' => [
+    \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+    
+],
+
+
 ];
+
