@@ -23,9 +23,15 @@ Route::get('orders/{id}', [OrderController::class, 'show']);
 Route::put('orders/{id}', [OrderController::class, 'update']);
 Route::delete('orders/{id}', [OrderController::class, 'destroy']);
 
-
+use App\Http\Controllers\UserController;
 Route::post('users/register', [UserController::class, 'register']);
 Route::post('users/login', [UserController::class, 'login']);
 Route::get('users/profile', [UserController::class, 'profile'])->middleware('auth:api');
 Route::put('users/update', [UserController::class, 'update'])->middleware('auth:api');
+
+
+Route::middleware('auth:sanctum')->get('/profile', [UserController::class, 'profile']);
+Route::middleware('auth:sanctum')->put('/update', [UserController::class, 'update']);
+Route::middleware('auth:sanctum')->post('/logout', [UserController::class, 'logout']);
+
 });

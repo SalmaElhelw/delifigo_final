@@ -6,8 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Laravel\Sanctum\HasApiTokens;
-
 
 class UserController extends Controller
 {
@@ -25,24 +23,13 @@ class UserController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        return response()->json(['message' => 'User registered successfully', 'user' => $user], 201);
-    }
+        $token = $user->createToken('auth_token')->plainTextToken;
 
-    public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string',
-        ]);
-
-        if (!Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
-        }
-
-        $user = Auth::user();
-        $token = $user->createToken('authToken')->plainTextToken;
-
-        return response()->json(['message' => 'Login successful', 'token' => $token]);
+        return response()->json([
+            'message' => 'User registered successfully',
+            'user' => $user,
+            'token' => $token
+        ], 201);
     }
 
     public function profile()
@@ -50,30 +37,31 @@ class UserController extends Controller
         return response()->json(Auth::user());
     }
 
-   
-   
-    public function update(Request $request)
-    {
-        
-        $user = Auth::user();
+    public function update(Request $request, $id)
+{
+    // البحث عن المستخدم بناءً على $id
+    $user = User::find($id);
 
-        
-        $validated = $request->validate([
-            'name' => 'nullable|string|max:255',
-            'email' => 'nullable|email|unique:users,email,' . $user->id,
-            'phone_number' => 'nullable|string',
-            'address' => 'nullable|string',
-            'visa_number' => 'nullable|string',
-            'visa_expiration_date' => 'nullable|string',
-            'visa_cvv' => 'nullable|string',
-        ]);
-
-        
-        $user->update($validated);
-
-        return response()->json([
-            'message' => 'Profile updated successfully',
-            'user' => $user,
-        ]);
+  
+    if (!$user) {
+        return response()->json(['message' => 'User not found'], 404);
     }
+
+
+    $validated = $request->validate([
+        'name' => 'nullable|string|max:255',
+        'email' => 'nullable|email|unique:users,email,' . $user->id,
+    ]);
+
+   
+    $user->update($validated);
+
+   
+    return response()->json([
+        'message' => 'User updated successfully',
+        'user' => $user,
+    ]);
 }
+
+}
+
