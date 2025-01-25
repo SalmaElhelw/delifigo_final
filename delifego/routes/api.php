@@ -26,7 +26,7 @@ Route::get('orders/{id}', [OrderController::class, 'show']);
 Route::put('orders/{id}', [OrderController::class, 'update']);
 Route::delete('orders/{id}', [OrderController::class, 'destroy']);
 
-Route::post('/register', [UserController::class, 'register']);
+Route::post('users/register', [UserController::class, 'register']);
 Route::post('users/login', [UserController::class, 'login']);
 Route::get('users/profile', [UserController::class, 'profile'])->middleware('auth:api');
 Route::put('users/update', [UserController::class, 'update'])->middleware('auth:api');
