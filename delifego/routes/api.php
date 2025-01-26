@@ -6,33 +6,38 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RestaurantController;
 
+// User routes
+Route::post('users/register', [UserController::class, 'register']);
+Route::post('users/login', [UserController::class, 'login']);
 
-Route::middleware('api')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('users/logout', [UserController::class, 'logout']);
+    Route::get('users/profile', [UserController::class, 'profile']);
+    Route::put('users/update', [UserController::class, 'update']);
+});
 
+// Restaurant routes
 Route::get('restaurants', [RestaurantController::class, 'index']);
 Route::get('restaurants/{id}', [RestaurantController::class, 'show']);
-Route::post('restaurants', [RestaurantController::class, 'store']);
-Route::put('restaurants/{id}', [RestaurantController::class, 'update']);
-Route::delete('restaurants/{id}', [RestaurantController::class, 'destroy']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('restaurants', [RestaurantController::class, 'store']);
+    Route::put('restaurants/{id}', [RestaurantController::class, 'update']);
+    Route::delete('restaurants/{id}', [RestaurantController::class, 'destroy']);
+});
 
-Route::post('meals', [MealController::class, 'store']);
+// Meal routes
 Route::get('meals/{id}', [MealController::class, 'show']);
-Route::put('meals/{id}', [MealController::class, 'update']);
-Route::delete('meals/{id}', [MealController::class, 'destroy']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('meals', [MealController::class, 'store']);
+    Route::put('meals/{id}', [MealController::class, 'update']);
+    Route::delete('meals/{id}', [MealController::class, 'destroy']);
+});
 
+// Order routes
 Route::get('orders', [OrderController::class, 'index']);
 Route::post('orders', [OrderController::class, 'store']);
 Route::get('orders/{id}', [OrderController::class, 'show']);
-Route::put('orders/{id}', [OrderController::class, 'update']);
-Route::delete('orders/{id}', [OrderController::class, 'destroy']);
-
-Route::post('users/register', [UserController::class, 'register']);
-Route::post('users/login', [UserController::class, 'login']);
-Route::get('users/profile', [UserController::class, 'profile'])->middleware('auth:api');
-Route::put('users/update', [UserController::class, 'update'])->middleware('auth:api');
-
-Route::middleware('auth:sanctum')->get('/profile', [UserController::class, 'profile']);
-Route::middleware('auth:sanctum')->put('/update', [UserController::class, 'update']);
-Route::middleware('auth:sanctum')->post('/logout', [UserController::class, 'logout']);
-
+Route::middleware('auth:sanctum')->group(function () {
+    Route::put('orders/{id}', [OrderController::class, 'update']);
+    Route::delete('orders/{id}', [OrderController::class, 'destroy']);
 });
