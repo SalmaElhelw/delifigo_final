@@ -5,6 +5,7 @@ use App\Http\Controllers\MealController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RestaurantController;
+use Illuminate\Support\Facades\Cookie;
 
 // User routes
 Route::post('users/register', [UserController::class, 'register']);
@@ -44,6 +45,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('test', function () {
         return response()->json(['message' => 'API is working']);
+    });
+
+
+    Route::get('/set-cookie', function () {
+        Cookie::queue(Cookie::make('key', 'value', 60)); // cookie will expire in 60 minutes
+        return 'Cookie has been set!';
     });
     
 });

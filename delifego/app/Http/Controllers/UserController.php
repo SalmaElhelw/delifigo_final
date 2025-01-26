@@ -76,6 +76,7 @@ class UserController extends Controller
     $validated = $request->validate([
         'name' => 'nullable|string|max:255',
         'email' => 'nullable|email|unique:users,email,' . $user->id,
+        'password' => 'sometimes|nullable|string|min:8',
     ]);
 
    
@@ -85,6 +86,8 @@ class UserController extends Controller
     return response()->json([
         'message' => 'User updated successfully',
         'user' => $user,
+    
+    
     ]);
 }
 
