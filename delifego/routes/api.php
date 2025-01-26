@@ -40,4 +40,10 @@ Route::get('orders/{id}', [OrderController::class, 'show']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::put('orders/{id}', [OrderController::class, 'update']);
     Route::delete('orders/{id}', [OrderController::class, 'destroy']);
+
+
+    Route::get('test', function () {
+        return response()->json(['message' => 'API is working']);
+    });
+    
 });
