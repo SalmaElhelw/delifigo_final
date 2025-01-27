@@ -16,15 +16,14 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // تعريف المسارات الخاصة بالـ API
         Route::group([
             'middleware' => 'api',
-            'prefix' => 'api', // تأكد من تحديد البريفكس هنا إذا كنت تستخدم الـ API
+            'prefix' => 'api', 
         ], function () {
             require base_path('routes/api.php');
         });
 
-        // تعريف المسارات الخاصة بالـ Web
+       
         Route::group([
             'middleware' => 'web',
         ], function () {
@@ -39,6 +38,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // يمكن إضافة خدمات أخرى هنا إذا كنت بحاجة
+        
     }
 }
