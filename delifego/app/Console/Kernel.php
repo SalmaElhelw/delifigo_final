@@ -1,27 +1,53 @@
 <?php
 
-namespace App\Console;
+namespace App\Http;
 
-use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
-class Kernel extends ConsoleKernel
+class Kernel extends HttpKernel
 {
     /**
-     * Define the application's command schedule.
+     * The application's global HTTP middleware stack.
+     *
+     * @var array
      */
-    protected function schedule(Schedule $schedule): void
-    {
-        // $schedule->command('inspire')->hourly();
-    }
+    protected $middleware = [
+        \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
+        // ...other global middlewares...
+    ];
 
     /**
-     * Register the commands for the application.
+     * The application's route middleware groups.
+     *
+     * @var array
      */
-    protected function commands(): void
-    {
-        $this->load(__DIR__.'/Commands');
+    protected $middlewareGroups = [
+        'web' => [
+            // ...web middlewares...
+        ],
 
-        require base_path('routes/console.php');
-    }
+        'api' => [
+            'throttle:api',
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            // ...other api middlewares...
+        ],
+    ];
+
+    /**
+     * The application's route middleware.
+     *
+     * @var array
+     */
+    protected $routeMiddleware = [
+        'auth' => \App\Http\Middleware\Authenticate::class,
+        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
+        'can' => \Illuminate\Auth\Middleware\Authorize::class,
+        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
+        'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
+        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+    ];
 }

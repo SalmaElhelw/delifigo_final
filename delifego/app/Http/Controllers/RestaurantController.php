@@ -17,14 +17,15 @@ class RestaurantController extends Controller
    
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string',
-            'type' => 'required|string',
-            'location' => 'required|string',
-            'phone_number' => 'required|string',
-        ]);
+      
 
-        $restaurant = Restaurant::create($validated);
+        $restaurant = Restaurant::create([
+            "name" =>$request->name,
+            "type"=>$request->type,
+            "location"=>$request->location,
+            "phone_num"=> $request->phone_num
+        ]
+            );
         return response()->json($restaurant, 201);
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\User;
+namespace App\Models;
 
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -10,7 +10,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens; 
 
-$user = new User(); 
 
 class User extends Authenticatable
 {
@@ -20,7 +19,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'phone_number',
+        'phonenum',
         'address',
         'visa_number',
         'visa_expiration_date',

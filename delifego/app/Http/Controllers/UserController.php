@@ -13,24 +13,23 @@ class UserController extends Controller
 {
     public function register(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8',
-        ]);
+
+
 
         $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
+            'name' => $request->name,
+            'email' => $request->email,
+            'phonenum' => $request->phonenum,
+            'address' => $request->address,
+            'password' => Hash::make($request->password),
         ]);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        // $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'message' => 'User registered successfully',
             'user' => $user,
-            'token' => $token
+            'token' => "token"
         ], 201);
     }
 
@@ -50,7 +49,7 @@ class UserController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages(['email' => 'Invalid credentials.']);
+            return response()->json(['email' => "Invalid"]);
         }
 
         return response()->json(['token' => $user->createToken('auth_token')->plainTextToken], 200);
@@ -63,33 +62,31 @@ class UserController extends Controller
     }
 
     public function update(Request $request, $id)
-   {
-    
-    $user = User::find($id);
+    {
 
-  
-    if (!$user) {
-        return response()->json(['message' => 'User not found'], 404);
+        $user = User::find($id);
+
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+
+        $validated = $request->validate([
+            'name' => 'nullable|string|max:255',
+            'email' => 'nullable|email|unique:users,email,' . $user->id,
+            'password' => 'sometimes|nullable|string|min:8',
+        ]);
+
+
+        $user->update($validated);
+
+
+        return response()->json([
+            'message' => 'User updated successfully',
+            'user' => $user,
+
+
+        ]);
     }
-
-
-    $validated = $request->validate([
-        'name' => 'nullable|string|max:255',
-        'email' => 'nullable|email|unique:users,email,' . $user->id,
-        'password' => 'sometimes|nullable|string|min:8',
-    ]);
-
-   
-    $user->update($validated);
-
-   
-    return response()->json([
-        'message' => 'User updated successfully',
-        'user' => $user,
-    
-    
-    ]);
 }
-
-}
-

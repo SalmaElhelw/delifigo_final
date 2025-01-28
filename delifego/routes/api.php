@@ -7,7 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RestaurantController;
 use Illuminate\Support\Facades\Cookie;
 
-// User routes
+// User routes  -- Tested - working
 Route::post('users/register', [UserController::class, 'register']);
 Route::post('users/login', [UserController::class, 'login']);
 
